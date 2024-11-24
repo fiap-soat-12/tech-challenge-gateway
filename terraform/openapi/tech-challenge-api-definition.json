@@ -433,6 +433,17 @@
                 ],
                 "summary": "Find Work Items",
                 "operationId": "findWorkItems",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
+                    }
+                ],
                 "responses": {
                     "404": {
                         "description": "Not Found Response",
@@ -841,6 +852,32 @@
             }
         }
     },
+    "x-amazon-apigateway-gateway-responses": {
+        "MISSING_AUTHENTICATION_TOKEN": {
+            "statusCode": 404,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Route not found.\"}"
+            }
+        },
+        "UNAUTHORIZED": {
+            "statusCode": 401,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Unauthorized access.\"}"
+            }
+        },
+        "DEFAULT_4XX": {
+            "statusCode": 403,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Forbidden.\"}"
+            }
+        },
+        "DEFAULT_5XX": {
+            "statusCode": 500,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Internal server error.\"}"
+            }
+        }
+    },
     "components": {
         "securitySchemes": {
             "LambdaAuthorizer": {
@@ -851,7 +888,8 @@
                 "x-amazon-apigateway-authorizer": {
                     "type": "REQUEST",
                     "authorizerUri": "${authorizer_uri}",
-                    "identitySource": "method.request.header.Authorization"
+                    "identitySource": "method.request.header.Authorization",
+                    "authorizerCredentials": "${authorizer_credentials}"
                 }
             }
         },
