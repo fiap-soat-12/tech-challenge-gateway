@@ -1,0 +1,1274 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Tech Challenge FIAP API",
+        "description": "API Rest for Tech Challenge of Master's Degree in Software Architecture \n\nDeveloped by:\n\n - Alexandre Miranda - RM357321\n\n - Diego Ceccon - RM357437\n\n - Jéssica Rodrigues - RM357218\n\n - Rodrigo Sartori - RM358002\n\n - Wilton Souza - RM357991\n\n",
+        "contact": {
+            "name": "SOAT 8 Group",
+            "email": "soat-group@gmail.com"
+        },
+        "version": "v1"
+    },
+    "servers": [
+        {
+            "url": "http://techchallenge-nlb-c6e01154999592cb.elb.us-east-1.amazonaws.com/api",
+            "description": "Generated server url"
+        }
+    ],
+    "paths": {
+        "/v1/products/{id}": {
+            "put": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Update a Product By ID",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "PUT",
+                    "uri": "http://${lb_dns_name}/api/v1/products/{id}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete a Product By ID",
+                "operationId": "deleteProductById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content Response",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "DELETE",
+                    "uri": "http://${lb_dns_name}/api/v1/products/{id}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "204"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/webhook-payment": {
+            "post": {
+                "tags": [
+                    "Webhook Payment"
+                ],
+                "summary": "Mercado Pago Payment WebHook",
+                "operationId": "handleWebhook",
+                "parameters": [
+                    {
+                        "name": "data.id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WebHookPaymentRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content Response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ErrorsValidateData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "POST",
+                    "uri": "http://${lb_dns_name}/api/v1/webhook-payment",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/products": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Find a Product By Category",
+                "operationId": "findProductsByCategory",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "MAIN_COURSE",
+                                "SIDE_DISH",
+                                "DRINK",
+                                "DESSERT"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductPageResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/api/v1/products",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Register a Product",
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ErrorsValidateData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "POST",
+                    "uri": "http://${lb_dns_name}/api/v1/products",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/orders": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Find Work Items",
+                "operationId": "findWorkItems",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderWorkItemsResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/api/v1/orders",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Register a Order",
+                "operationId": "create_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateOrderRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateOrderResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ErrorsValidateData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "POST",
+                    "uri": "http://${lb_dns_name}/api/v1/orders",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/customers": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Register a Customer",
+                "operationId": "create_2",
+                "requestBody": {
+                    "description": "Representation of a Customer",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ErrorsValidateData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "POST",
+                    "uri": "http://${lb_dns_name}/api/v1/customers",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/orders/{id}": {
+            "patch": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Evolve Status of Orders",
+                "operationId": "evolveStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "OK Response",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "POST",
+                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/orders/{id}/paid-status": {
+            "get": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Get the status of an order by its ID",
+                "operationId": "isOrderPaid",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}/paid-status",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/customers/{document}": {
+            "get": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Find a Customer By Document",
+                "operationId": "findByDocument",
+                "parameters": [
+                    {
+                        "name": "document",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/api/v1/customers/{document}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.document": "method.request.path.document"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "x-amazon-apigateway-gateway-responses": {
+        "MISSING_AUTHENTICATION_TOKEN": {
+            "statusCode": 404,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Route not found.\"}"
+            }
+        },
+        "UNAUTHORIZED": {
+            "statusCode": 401,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Unauthorized access.\"}"
+            }
+        },
+        "DEFAULT_4XX": {
+            "statusCode": 403,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Forbidden.\"}"
+            }
+        },
+        "DEFAULT_5XX": {
+            "statusCode": 500,
+            "responseTemplates": {
+                "application/json": "{\"message\": \"Internal server error.\"}"
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "LambdaAuthorizer": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "x-amazon-apigateway-authtype": "custom",
+                "x-amazon-apigateway-authorizer": {
+                    "type": "REQUEST",
+                    "authorizerUri": "${authorizer_uri}",
+                    "identitySource": "method.request.header.Authorization",
+                    "authorizerCredentials": "${authorizer_credentials}"
+                }
+            }
+        },
+        "schemas": {
+            "CustomerRequestDTO": {
+                "required": [
+                    "document",
+                    "email",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Fiaperson"
+                    },
+                    "document": {
+                        "type": "string",
+                        "example": "42256425002"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "fiaperson@soat.com"
+                    }
+                }
+            },
+            "OrderWorkItemDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1
+                    },
+                    "customerName": {
+                        "type": "string",
+                        "example": "Charles"
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderProductWorkItemDto"
+                        }
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-08-03T01:15:58Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-08-03T01:17:58Z"
+                    }
+                }
+            },
+            "ProductPageResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductResponseDTO"
+                        }
+                    },
+                    "page": {
+                        "$ref": "#/components/schemas/PageResponseDTO"
+                    }
+                }
+            },
+            "OrderWorkItemsResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "ready": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderWorkItemDto"
+                        }
+                    },
+                    "preparing": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderWorkItemDto"
+                        }
+                    },
+                    "received": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderWorkItemDto"
+                        }
+                    }
+                }
+            },
+            "OrderProducts": {
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "7091cbdc-2d24-4faf-aadd-995a7bcc6b5b"
+                    },
+                    "observation": {
+                        "type": "string",
+                        "example": "Without Onions please"
+                    }
+                }
+            },
+            "WebHookPaymentRequest": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "example": "payment.created"
+                    },
+                    "api_version": {
+                        "type": "string",
+                        "example": "v1"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/WebHookPaymentDataRequest"
+                    },
+                    "date_created": {
+                        "type": "string",
+                        "example": "2024-09-17T23:29:26Z"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 115915708642
+                    },
+                    "live_mode": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "payment"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "1986357239"
+                    }
+                }
+            },
+            "ProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Cheese Hamburger"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "MAIN_COURSE",
+                        "enum": [
+                            "MAIN_COURSE",
+                            "SIDE_DISH",
+                            "DRINK",
+                            "DESSERT"
+                        ]
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 25.9
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Hamburger with Cheese"
+                    }
+                }
+            },
+            "ErrorsValidateData": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "string",
+                        "example": "fieldName"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "must not be blank"
+                    }
+                }
+            },
+            "CustomerResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Fiaperson"
+                    },
+                    "document": {
+                        "type": "string",
+                        "example": "42256425002"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "fiaperson@soat.com"
+                    }
+                }
+            },
+            "ProductRequestDTO": {
+                "required": [
+                    "category",
+                    "description",
+                    "name",
+                    "price"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Cheese Hamburger"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "MAIN_COURSE",
+                        "enum": [
+                            "MAIN_COURSE",
+                            "SIDE_DISH",
+                            "DRINK",
+                            "DESSERT"
+                        ]
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 25.9
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Hamburger with Cheese"
+                    }
+                }
+            },
+            "OrderProductWorkItemDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "productId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "productName": {
+                        "type": "string",
+                        "example": "X - Burguer"
+                    },
+                    "customization": {
+                        "type": "string",
+                        "example": "Sem queijo"
+                    }
+                }
+            },
+            "WebHookPaymentDataRequest": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "87847869771"
+                    }
+                },
+                "example": {
+                    "id": "87847869771"
+                }
+            },
+            "CreateOrderRequestDTO": {
+                "required": [
+                    "products"
+                ],
+                "type": "object",
+                "properties": {
+                    "customerId": {
+                        "type": "string",
+                        "example": "cd5b8e43-5d8f-4e92-9f7d-6b9d7e4f7e9c"
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderProducts"
+                        }
+                    }
+                }
+            },
+            "CreateOrderResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1
+                    },
+                    "qrCode": {
+                        "type": "string",
+                        "example": "00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-426655440000 5204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***63041D3D"
+                    }
+                }
+            },
+            "PageResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "totalElements": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 10
+                    },
+                    "number": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 0
+                    },
+                    "first": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "last": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "numberOfElements": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "empty": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "ProblemDto": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Error Message"
+                    },
+                    "dateTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-07-24T22:13:58Z"
+                    }
+                }
+            }
+        }
+    }
+}
