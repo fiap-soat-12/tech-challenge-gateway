@@ -12,13 +12,13 @@ variable "vpc_name" {
 
 variable "nlb_name" {
   type = string
-  default = "techchallenge-nlb"
+  default = "tech-challenge-nlb"
   description = "Network Load Balancer name"
 }
 
 variable "lambda_authorizer_name" {
   type = string
-  default = "my_lambda"
+  default = "tech-challenge-lambda-authorizer"
   description = "Lambda Authorizer name"
 }
 
