@@ -9,12 +9,6 @@
         },
         "version": "v1"
     },
-    "servers": [
-        {
-            "url": "http://techchallenge-nlb-c6e01154999592cb.elb.us-east-1.amazonaws.com/api",
-            "description": "Generated server url"
-        }
-    ],
     "paths": {
         "/v1/products/{id}": {
             "put": {
