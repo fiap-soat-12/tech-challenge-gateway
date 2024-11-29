@@ -1,5 +1,6 @@
 resource "aws_cognito_user_pool" "user_pool" {
-  name = "tech-challenge-user-pool"
+  name                     = "tech-challenge-user-pool"
+  auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
 }
@@ -26,16 +27,18 @@ resource "aws_cognito_resource_server" "gateway_scope" {
 }
 
 resource "aws_cognito_user_pool_client" "user_pool_client" {
-  name                                 = "tech-challenge-client"
-  user_pool_id                         = aws_cognito_user_pool.user_pool.id
-  generate_secret                      = true
+  name            = "tech-challenge-client"
+  user_pool_id    = aws_cognito_user_pool.user_pool.id
+  generate_secret = true
+
   allowed_oauth_flows_user_pool_client = true
-  prevent_user_existence_errors        = "ENABLED"
-  supported_identity_providers         = ["COGNITO"]
-  explicit_auth_flows                  = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
   allowed_oauth_flows                  = ["implicit"]
   allowed_oauth_scopes                 = ["email", "openid"]
 
-  callback_urls = ["https://example.com"]
+  prevent_user_existence_errors = "ENABLED"
+  supported_identity_providers  = ["COGNITO"]
+  explicit_auth_flows           = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+
+  callback_urls = ["https://fiap-soat-12.github.io/fiap-soat-tech-challenge-api/"]
 }
 
