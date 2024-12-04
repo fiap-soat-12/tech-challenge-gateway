@@ -16,7 +16,7 @@
                     "Product"
                 ],
                 "summary": "Update a Product By ID",
-                "operationId": "update",
+                "operationId": "updateProduct",
                 "parameters": [
                     {
                         "name": "id",
@@ -26,6 +26,15 @@
                             "type": "string",
                             "format": "uuid"
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "requestBody": {
@@ -106,6 +115,15 @@
                             "type": "string",
                             "format": "uuid"
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -303,6 +321,15 @@
                             "format": "int32",
                             "default": 10
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -360,7 +387,18 @@
                     "Product"
                 ],
                 "summary": "Register a Product",
-                "operationId": "create",
+                "operationId": "createProduct",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -431,7 +469,7 @@
                     "Order"
                 ],
                 "summary": "Find Work Items",
-                "operationId": "findWorkItems",
+                "operationId": "getOrders",
                 "parameters": [
                     {
                         "name": "Authorization",
@@ -498,7 +536,18 @@
                     "Order"
                 ],
                 "summary": "Register a Order",
-                "operationId": "create_1",
+                "operationId": "createOrder",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -569,7 +618,18 @@
                     "Customer"
                 ],
                 "summary": "Register a Customer",
-                "operationId": "create_2",
+                "operationId": "createCustomer",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
+                    }
+                ],
                 "requestBody": {
                     "description": "Representation of a Customer",
                     "content": {
@@ -651,6 +711,15 @@
                             "type": "string",
                             "format": "uuid"
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -723,6 +792,15 @@
                             "type": "string",
                             "format": "uuid"
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -794,6 +872,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
