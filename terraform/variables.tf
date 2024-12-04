@@ -21,4 +21,3 @@ variable "lambda_authorizer_name" {
   default = "tech-challenge-lambda-authorizer"
   description = "Lambda Authorizer name"
 }
-

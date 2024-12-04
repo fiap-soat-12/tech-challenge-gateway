@@ -337,6 +337,11 @@
                         }
                     }
                 },
+                "security": [
+                    {
+                        "LambdaAuthorizer": []
+                    }
+                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",

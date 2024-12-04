@@ -42,3 +42,12 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   callback_urls = ["https://fiap-soat-12.github.io/fiap-soat-tech-challenge-api/"]
 }
 
+resource "null_resource" "update_lambda_environment" {
+  provisioner "local-exec" {
+    command = <<EOT
+      aws lambda update-function-configuration \
+        --function-name "${var.lambda_authorizer_name}" \
+        --environment "Variables={USER_POOL_ID=${aws_cognito_user_pool.user_pool.id}}"
+    EOT
+  }
+}
