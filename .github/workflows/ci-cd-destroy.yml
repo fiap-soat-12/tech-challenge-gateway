@@ -41,6 +41,5 @@ jobs:
 
       # Executar o Terraform Destroy
       - name: Destroy Terraform for Gateway
-        if: github.ref == 'refs/heads/main' # Executa apenas na branch main
         working-directory: terraform
         run: terraform destroy -auto-approve
