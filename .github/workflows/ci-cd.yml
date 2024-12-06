@@ -46,11 +46,11 @@ jobs:
         run: terraform validate
 
       - name: Plan Terraform for Gateway
-        #if: github.ref == 'refs/heads/main' # Executa apenas na branch main
+        if: github.ref == 'refs/heads/main' # Executa apenas na branch main
         working-directory: terraform
         run: terraform plan -out=gateway
 
       - name: Apply Terraform for Gateway
-        #if: github.ref == 'refs/heads/main' # Executa apenas na branch main
+        if: github.ref == 'refs/heads/main' # Executa apenas na branch main
         working-directory: terraform
         run: terraform apply -auto-approve gateway
