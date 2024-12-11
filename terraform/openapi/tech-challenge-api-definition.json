@@ -272,6 +272,10 @@
                     "uri": "http://${lb_dns_name}/api/v1/webhook-payment",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.querystring.data.id": "method.request.querystring.data.id",
+                        "integration.request.querystring.type": "method.request.querystring.type"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -373,6 +377,11 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/api/v1/products",
+                    "requestParameters": {
+                        "integration.request.querystring.category": "method.request.querystring.category",
+                        "integration.request.querystring.page": "method.request.querystring.page",
+                        "integration.request.querystring.size": "method.request.querystring.size"
+                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
