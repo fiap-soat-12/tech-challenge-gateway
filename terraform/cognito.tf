@@ -1,5 +1,9 @@
+resource "random_id" "hex_string" {
+  byte_length = 8
+}
+
 resource "aws_cognito_user_pool" "user_pool" {
-  name                     = "tech-challenge-user-pool"
+  name                     = "tech-challenge-user-pool-${random_id.hex_string.hex}"
   auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
@@ -43,6 +47,10 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
 }
 
 resource "null_resource" "update_lambda_environment" {
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
   provisioner "local-exec" {
     command = <<EOT
       aws lambda update-function-configuration \
