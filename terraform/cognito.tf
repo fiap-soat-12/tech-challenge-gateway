@@ -3,14 +3,14 @@ resource "random_id" "hex_string" {
 }
 
 resource "aws_cognito_user_pool" "user_pool" {
-  name                     = "tech-challenge-user-pool-${random_id.hex_string.hex}"
+  name                     = "tech-challenge-user-pool"
   auto_verified_attributes = ["email"]
 
   username_attributes = ["email"]
 }
 
 resource "aws_cognito_user_pool_domain" "cognito_domain" {
-  domain       = "tech-challenge-domain"
+  domain       = "tech-challenge-domain-${random_id.hex_string.hex}"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
 

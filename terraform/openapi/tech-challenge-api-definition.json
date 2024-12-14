@@ -945,6 +945,163 @@
                     }
                 }
             }
+        },
+        "/grafana": {
+            "x-amazon-apigateway-any-method": {
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "ANY",
+                    "uri": "http://${lb_dns_name}/grafana",
+                    "passthroughBehavior": "when_no_match",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}"    
+                }
+            },
+            "options": {
+                "summary": "CORS Support",
+                "responses": {
+                    "200": {
+                        "description": "CORS response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "type": "string",
+                                "enum": [
+                                    "*"
+                                ]
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "type": "string",
+                                "enum": [
+                                    "GET",
+                                    "POST",
+                                    "PUT",
+                                    "DELETE",
+                                    "OPTIONS"
+                                ]
+                            },
+                            "Access-Control-Allow-Headers": {
+                                "type": "string",
+                                "enum": [
+                                    "Content-Type",
+                                    "Authorization"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'",
+                                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'"
+                            },
+                            "responseTemplates": {
+                                "application/json": "{}"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/grafana/{proxy+}": {
+            "x-amazon-apigateway-any-method": {
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "proxy",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "ANY",
+                    "uri": "http://${lb_dns_name}/grafana/{proxy}",
+                    "passthroughBehavior": "when_no_match",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.proxy": "method.request.path.proxy"
+                    }
+                }
+            },
+            "options": {
+                "summary": "CORS Support",
+                "responses": {
+                    "200": {
+                        "description": "CORS response",
+                        "headers": {
+                            "Access-Control-Allow-Origin": {
+                                "type": "string",
+                                "enum": [
+                                    "*"
+                                ]
+                            },
+                            "Access-Control-Allow-Methods": {
+                                "type": "string",
+                                "enum": [
+                                    "GET",
+                                    "POST",
+                                    "PUT",
+                                    "DELETE",
+                                    "OPTIONS"
+                                ]
+                            },
+                            "Access-Control-Allow-Headers": {
+                                "type": "string",
+                                "enum": [
+                                    "Content-Type",
+                                    "Authorization"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "mock",
+                    "requestTemplates": {
+                        "application/json": "{\"statusCode\": 200}"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200",
+                            "responseParameters": {
+                                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                                "method.response.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'",
+                                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization'"
+                            },
+                            "responseTemplates": {
+                                "application/json": "{}"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "x-amazon-apigateway-gateway-responses": {
