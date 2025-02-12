@@ -52,10 +52,6 @@ resource "null_resource" "update_lambda_environment" {
   }
 
   provisioner "local-exec" {
-    command = <<EOT
-      aws lambda update-function-configuration \
-        --function-name "${var.lambda_authorizer_name}" \
-        --environment "Variables={USER_POOL_ID=${aws_cognito_user_pool.user_pool.id}}"
-    EOT
+    command = "aws lambda update-function-configuration --function-name ${var.lambda_authorizer_name} --environment Variables={USER_POOL_ID=${aws_cognito_user_pool.user_pool.id}}"
   }
 }
