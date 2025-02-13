@@ -99,7 +99,7 @@
                 "security": [],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
-                    "httpMethod": "GET",
+                    "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/payment/v1/webhook-payment",
                     "requestParameters": {
                         "integration.request.querystring.data.id": "method.request.querystring.data.id",
