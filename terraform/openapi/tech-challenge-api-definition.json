@@ -742,7 +742,7 @@
                 ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
-                    "httpMethod": "GET",
+                    "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/cook/v1/products",
                     "requestParameters": {},
                     "connectionType": "VPC_LINK",
