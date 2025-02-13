@@ -171,7 +171,7 @@
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/payment/v1/qrs/{orderId}",
                     "requestParameters": {
-                        "integration.request.path.data.id": "method.request.querystring.orderId"
+                        "integration.request.path.orderId": "method.request.path.orderId"
                     },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
@@ -537,7 +537,11 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/order/v1/products",
-                    "requestParameters": {},
+                    "requestParameters": {
+                        "integration.request.querystring.category": "method.request.querystring.category",
+                        "integration.request.querystring.page": "method.request.querystring.page",
+                        "integration.request.querystring.size": "method.request.querystring.size"
+                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
