@@ -10,180 +10,10 @@
         "version": "v1"
     },
     "paths": {
-        "/v1/products/{id}": {
-            "put": {
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Update a Product By ID",
-                "operationId": "updateProduct",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ProductRequestDTO"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "Ok Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProductResponseDTO"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
-                "x-amazon-apigateway-integration": {
-                    "type": "http_proxy",
-                    "httpMethod": "PUT",
-                    "uri": "http://${lb_dns_name}/api/v1/products/{id}",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
-                    "responses": {
-                        "default": {
-                            "statusCode": "200"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Delete a Product By ID",
-                "operationId": "deleteProductById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
-                    }
-                ],
-                "responses": {
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "204": {
-                        "description": "No Content Response",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
-                "x-amazon-apigateway-integration": {
-                    "type": "http_proxy",
-                    "httpMethod": "DELETE",
-                    "uri": "http://${lb_dns_name}/api/v1/products/{id}",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
-                    "responses": {
-                        "default": {
-                            "statusCode": "204"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/webhook-payment": {
+        "/payment/v1/webhook-payment": {
             "post": {
                 "tags": [
-                    "Webhook Payment"
+                    "Payment"
                 ],
                 "summary": "Mercado Pago Payment WebHook",
                 "operationId": "handleWebhook",
@@ -266,16 +96,17 @@
                         }
                     }
                 },
+                "security": [],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
-                    "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/api/v1/webhook-payment",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/payment/v1/webhook-payment",
                     "requestParameters": {
                         "integration.request.querystring.data.id": "method.request.querystring.data.id",
                         "integration.request.querystring.type": "method.request.querystring.type"
                     },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -284,56 +115,22 @@
                 }
             }
         },
-        "/v1/products": {
+        "/payment/v1/qrs/{orderId}": {
             "get": {
                 "tags": [
-                    "Product"
+                    "Payment"
                 ],
-                "summary": "Find a Product By Category",
-                "operationId": "findProductsByCategory",
+                "summary": "Find a Qr By OrderId",
+                "operationId": "findQrByOrderId",
                 "parameters": [
                     {
-                        "name": "category",
-                        "in": "query",
+                        "name": "orderId",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "enum": [
-                                "MAIN_COURSE",
-                                "SIDE_DISH",
-                                "DRINK",
-                                "DESSERT"
-                            ]
+                            "format": "uuid"
                         }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "default": 0
-                        }
-                    },
-                    {
-                        "name": "size",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "default": 10
-                        }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
@@ -352,7 +149,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ProductPageResponseDTO"
+                                    "$ref": "#/components/schemas/PaymentQrResponseDTO"
                                 }
                             }
                         }
@@ -368,19 +165,13 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
+                "security": [],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/products",
+                    "uri": "http://${lb_dns_name}/payment/v1/qrs/{orderId}",
                     "requestParameters": {
-                        "integration.request.querystring.category": "method.request.querystring.category",
-                        "integration.request.querystring.page": "method.request.querystring.page",
-                        "integration.request.querystring.size": "method.request.querystring.size"
+                        "integration.request.path.data.id": "method.request.querystring.orderId"
                     },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
@@ -390,14 +181,25 @@
                         }
                     }
                 }
-            },
-            "post": {
+            }
+        },
+        "/order/v1/orders/{id}": {
+            "get": {
                 "tags": [
-                    "Product"
+                    "Order"
                 ],
-                "summary": "Register a Product",
-                "operationId": "createProduct",
+                "summary": "Get the status of an order by its ID",
+                "operationId": "findOrderStatus",
                 "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
                     {
                         "name": "Authorization",
                         "in": "header",
@@ -406,31 +208,87 @@
                             "type": "string"
                         },
                         "description": "Authorization token"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderStatusResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Evolve Order to Paid or Not Paid",
+                "operationId": "paidOrder",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
                     }
                 ],
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ProductRequestDTO"
+                                "$ref": "#/components/schemas/PaidRequestDTO"
                             }
                         }
                     },
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ErrorsValidateData"
-                                    }
-                                }
-                            }
-                        }
+                    "200": {
+                        "description": "OK Response"
                     },
                     "500": {
                         "description": "Internal Server Error Response",
@@ -438,16 +296,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "201": {
-                        "description": "Created Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProductResponseDTO"
                                 }
                             }
                         }
@@ -460,10 +308,13 @@
                 ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
-                    "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/api/v1/products",
+                    "httpMethod": "PUT",
+                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -472,91 +323,13 @@
                 }
             }
         },
-        "/v1/orders": {
-            "get": {
-                "tags": [
-                    "Order"
-                ],
-                "summary": "Find Work Items",
-                "operationId": "getOrders",
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
-                    }
-                ],
-                "responses": {
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "Ok Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderWorkItemsResponseDTO"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
-                "x-amazon-apigateway-integration": {
-                    "type": "http_proxy",
-                    "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/orders",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
-                    "responses": {
-                        "default": {
-                            "statusCode": "200"
-                        }
-                    }
-                }
-            },
+        "/order/v1/orders": {
             "post": {
                 "tags": [
                     "Order"
                 ],
                 "summary": "Register a Order",
-                "operationId": "createOrder",
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
-                    }
-                ],
+                "operationId": "create",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -602,15 +375,11 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/api/v1/orders",
+                    "uri": "http://${lb_dns_name}/order/v1/orders",
+                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -621,24 +390,13 @@
                 }
             }
         },
-        "/v1/customers": {
+        "/order/v1/customers": {
             "post": {
                 "tags": [
-                    "Customer"
+                    "Order"
                 ],
                 "summary": "Register a Customer",
-                "operationId": "createCustomer",
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
-                    }
-                ],
+                "operationId": "create_1",
                 "requestBody": {
                     "description": "Representation of a Customer",
                     "content": {
@@ -651,6 +409,16 @@
                     "required": true
                 },
                 "responses": {
+                    "201": {
+                        "description": "Created Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerResponseDTO"
+                                }
+                            }
+                        }
+                    },
                     "400": {
                         "description": "Bad Request Response",
                         "content": {
@@ -673,27 +441,13 @@
                                 }
                             }
                         }
-                    },
-                    "201": {
-                        "description": "Created Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/CustomerResponseDTO"
-                                }
-                            }
-                        }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/api/v1/customers",
+                    "uri": "http://${lb_dns_name}/order/v1/customers",
+                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -704,50 +458,66 @@
                 }
             }
         },
-        "/v1/orders/{id}": {
-            "patch": {
+        "/order/v1/products": {
+            "get": {
                 "tags": [
                     "Order"
                 ],
-                "summary": "Evolve Status of Orders",
-                "operationId": "evolveStatus",
+                "summary": "Find a Product By Category",
+                "operationId": "findProductsByCategory",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
+                        "name": "category",
+                        "in": "query",
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "format": "uuid"
+                            "enum": [
+                                "MAIN_COURSE",
+                                "SIDE_DISH",
+                                "DRINK",
+                                "DESSERT"
+                            ]
                         }
                     },
                     {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
                         "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 10
+                        }
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductPageResponseDTO"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Not Found Response",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "204": {
-                        "description": "OK Response",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "type": "object"
                                 }
                             }
                         }
@@ -763,20 +533,13 @@
                         }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
-                    "httpMethod": "POST",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/order/v1/products",
+                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -785,7 +548,7 @@
                 }
             }
         },
-        "/v1/orders/{id}/paid-status": {
+        "/order/v1/orders/{id}/paid-status": {
             "get": {
                 "tags": [
                     "Order"
@@ -801,18 +564,19 @@
                             "type": "string",
                             "format": "uuid"
                         }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "OK Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Not Found Response",
                         "content": {
@@ -832,32 +596,17 @@
                                 }
                             }
                         }
-                    },
-                    "200": {
-                        "description": "OK Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "boolean"
-                                }
-                            }
-                        }
                     }
                 },
-                "security": [
-                    {
-                        "LambdaAuthorizer": []
-                    }
-                ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}/paid-status",
-                    "connectionType": "VPC_LINK",
-                    "connectionId": "${vpc_link_id}",
+                    "uri": "http://${lb_dns_name}/order/v1/orders/{id}/paid-status",
                     "requestParameters": {
                         "integration.request.path.id": "method.request.path.id"
                     },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -866,10 +615,10 @@
                 }
             }
         },
-        "/v1/customers/{document}": {
+        "/order/v1/customers/{document}": {
             "get": {
                 "tags": [
-                    "Customer"
+                    "Order"
                 ],
                 "summary": "Find a Customer By Document",
                 "operationId": "findByDocument",
@@ -881,18 +630,19 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Authorization token"
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "Ok Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerResponseDTO"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Not Found Response",
                         "content": {
@@ -912,13 +662,66 @@
                                 }
                             }
                         }
+                    }
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/order/v1/customers/{document}",
+                    "requestParameters": {
+                        "integration.request.path.document": "method.request.path.document"
                     },
-                    "200": {
-                        "description": "Ok Response",
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/cook/v1/products": {
+            "post": {
+                "operationId": "CreateProductController_createUser",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product successfully created.",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CustomerResponseDTO"
+                                    "$ref": "#/components/schemas/GetProductResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
                                 }
                             }
                         }
@@ -926,18 +729,487 @@
                 },
                 "security": [
                     {
-                        "LambdaAuthorizer": []
+                        "Authorization": []
                     }
+                ],
+                "summary": "Register a Product",
+                "tags": [
+                    "Cook"
                 ],
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/customers/{document}",
+                    "uri": "http://${lb_dns_name}/cook/v1/products",
+                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.document": "method.request.path.document"
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetProductController_getProducts",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Products retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/GetProductResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Find a Product By Category",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/cook/v1/products",
+                    "requestParameters": {},
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/cook/v1/products/category": {
+            "get": {
+                "operationId": "GetProductPaginatedController_getProductsPaginated",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "required": false,
+                        "in": "query",
+                        "description": "Category of the product",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "MAIN_COURSE",
+                                "SIDE_DISH",
+                                "DRINK",
+                                "DESSERT"
+                            ]
+                        }
                     },
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "Page number for pagination",
+                        "schema": {
+                            "default": 0,
+                            "example": 0,
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "required": false,
+                        "in": "query",
+                        "description": "Number of products per page",
+                        "schema": {
+                            "default": 10,
+                            "example": 10,
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Products retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "content": [
+                                            {
+                                                "id": "7901cbdc-2d24-4faf-aadd-995a7bcc6b5b",
+                                                "name": "Hambúrguer Clássico",
+                                                "category": "MAIN_COURSE",
+                                                "description": "Hambúrguer com carne bovina, queijo e salada",
+                                                "price": "30.00"
+                                            }
+                                        ],
+                                        "currentPage": 0,
+                                        "pageSize": 1,
+                                        "totalElements": 31,
+                                        "totalPages": 31
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Find a Product By Category",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/cook/v1/products/category",
+                    "requestParameters": {},
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/cook/v1/products/{id}": {
+            "get": {
+                "operationId": "GetProductByIdController_getProductById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "UUID of the product to inactivate",
+                        "schema": {
+                            "example": "a6b9e046-fb5a-4a79-9d86-363e6fd20e11",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetProductResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Get a Product By ID",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "GET",
+                    "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "InactivateProductController_inactivate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "UUID of the product to inactivate",
+                        "schema": {
+                            "example": "a6b9e046-fb5a-4a79-9d86-363e6fd20e11",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product inactivated successfully."
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Inactivate a Product By ID",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "DELETE",
+                    "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "UpdateProductController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "UUID of the product to update",
+                        "schema": {
+                            "example": "a6b9e046-fb5a-4a79-9d86-363e6fd20e11",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetProductResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found."
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Update a Product By ID",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "PUT",
+                    "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
+                    "responses": {
+                        "default": {
+                            "statusCode": "200"
+                        }
+                    }
+                }
+            }
+        },
+        "/cook/v1/orders/{id}/status/{status}": {
+            "patch": {
+                "operationId": "UpdateOrderStatusController_updateOrderStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "UUID of the order to update",
+                        "schema": {
+                            "example": "a6b9e046-fb5a-4a79-9d86-363e6fd20e11",
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "required": true,
+                        "in": "path",
+                        "description": "New status of the order",
+                        "schema": {
+                            "enum": [
+                                "READY",
+                                "FINISHED"
+                            ],
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order status updated."
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Order not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Erros4xx5xxResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "summary": "Update Order Status",
+                "tags": [
+                    "Cook"
+                ],
+                "x-amazon-apigateway-integration": {
+                    "type": "http_proxy",
+                    "httpMethod": "PATCH",
+                    "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id",
+                        "integration.request.path.status": "method.request.path.status"
+                    },
+                    "connectionType": "VPC_LINK",
+                    "connectionId": "${vpc_link_id}",
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -989,114 +1261,16 @@
             }
         },
         "schemas": {
-            "CustomerRequestDTO": {
-                "required": [
-                    "document",
-                    "email",
-                    "name"
-                ],
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Fiaperson"
-                    },
-                    "document": {
-                        "type": "string",
-                        "example": "42256425002"
-                    },
-                    "email": {
-                        "type": "string",
-                        "example": "fiaperson@soat.com"
-                    }
-                }
-            },
-            "OrderWorkItemDto": {
+            "WebHookPaymentDataRequest": {
                 "type": "object",
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid",
-                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
-                    },
-                    "sequence": {
-                        "type": "integer",
-                        "format": "int32",
-                        "example": 1
-                    },
-                    "customerName": {
-                        "type": "string",
-                        "example": "Charles"
-                    },
-                    "products": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OrderProductWorkItemDto"
-                        }
-                    },
-                    "createdAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-08-03T01:15:58Z"
-                    },
-                    "updatedAt": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2024-08-03T01:17:58Z"
+                        "example": "87847869771"
                     }
-                }
-            },
-            "ProductPageResponseDTO": {
-                "type": "object",
-                "properties": {
-                    "content": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ProductResponseDTO"
-                        }
-                    },
-                    "page": {
-                        "$ref": "#/components/schemas/PageResponseDTO"
-                    }
-                }
-            },
-            "OrderWorkItemsResponseDTO": {
-                "type": "object",
-                "properties": {
-                    "ready": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OrderWorkItemDto"
-                        }
-                    },
-                    "preparing": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OrderWorkItemDto"
-                        }
-                    },
-                    "received": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OrderWorkItemDto"
-                        }
-                    }
-                }
-            },
-            "OrderProducts": {
-                "required": [
-                    "id"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "example": "7091cbdc-2d24-4faf-aadd-995a7bcc6b5b"
-                    },
-                    "observation": {
-                        "type": "string",
-                        "example": "Without Onions please"
-                    }
+                },
+                "example": {
+                    "id": "87847869771"
                 }
             },
             "WebHookPaymentRequest": {
@@ -1136,48 +1310,28 @@
                     }
                 }
             },
-            "ProductResponseDTO": {
+            "OrderStatusResponseDTO": {
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "orderId": {
                         "type": "string",
                         "format": "uuid",
                         "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
                     },
-                    "name": {
-                        "type": "string",
-                        "example": "Cheese Hamburger"
+                    "sequence": {
+                        "type": "integer",
+                        "format": "int32",
+                        "example": 1
                     },
-                    "category": {
+                    "status": {
                         "type": "string",
-                        "example": "MAIN_COURSE",
+                        "example": "RECEIVED",
                         "enum": [
-                            "MAIN_COURSE",
-                            "SIDE_DISH",
-                            "DRINK",
-                            "DESSERT"
+                            "RECEIVED",
+                            "PREPARING",
+                            "READY",
+                            "FINISHED"
                         ]
-                    },
-                    "price": {
-                        "type": "number",
-                        "example": 25.9
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Hamburger with Cheese"
-                    }
-                }
-            },
-            "ErrorsValidateData": {
-                "type": "object",
-                "properties": {
-                    "field": {
-                        "type": "string",
-                        "example": "fieldName"
-                    },
-                    "message": {
-                        "type": "string",
-                        "example": "must not be blank"
                     }
                 }
             },
@@ -1203,89 +1357,17 @@
                     }
                 }
             },
-            "ProductRequestDTO": {
-                "required": [
-                    "category",
-                    "description",
-                    "name",
-                    "price"
-                ],
+            "ProductPageResponseDTO": {
                 "type": "object",
                 "properties": {
-                    "name": {
-                        "type": "string",
-                        "example": "Cheese Hamburger"
-                    },
-                    "category": {
-                        "type": "string",
-                        "example": "MAIN_COURSE",
-                        "enum": [
-                            "MAIN_COURSE",
-                            "SIDE_DISH",
-                            "DRINK",
-                            "DESSERT"
-                        ]
-                    },
-                    "price": {
-                        "type": "number",
-                        "example": 25.9
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Hamburger with Cheese"
-                    }
-                }
-            },
-            "OrderProductWorkItemDto": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
-                    },
-                    "productId": {
-                        "type": "string",
-                        "format": "uuid",
-                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
-                    },
-                    "productName": {
-                        "type": "string",
-                        "example": "X - Burguer"
-                    },
-                    "customization": {
-                        "type": "string",
-                        "example": "Sem queijo"
-                    }
-                }
-            },
-            "WebHookPaymentDataRequest": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "example": "87847869771"
-                    }
-                },
-                "example": {
-                    "id": "87847869771"
-                }
-            },
-            "CreateOrderRequestDTO": {
-                "required": [
-                    "products"
-                ],
-                "type": "object",
-                "properties": {
-                    "customerId": {
-                        "type": "string",
-                        "example": "cd5b8e43-5d8f-4e92-9f7d-6b9d7e4f7e9c"
-                    },
-                    "products": {
+                    "content": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/OrderProducts"
+                            "$ref": "#/components/schemas/ProductResponseDTO"
                         }
+                    },
+                    "page": {
+                        "$ref": "#/components/schemas/PageResponseDTO"
                     }
                 }
             },
@@ -1301,10 +1383,22 @@
                         "type": "integer",
                         "format": "int32",
                         "example": 1
-                    },
-                    "qrCode": {
+                    }
+                }
+            },
+            "OrderProducts": {
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
                         "type": "string",
-                        "example": "00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-426655440000 5204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***63041D3D"
+                        "example": "7091cbdc-2d24-4faf-aadd-995a7bcc6b5b"
+                    },
+                    "observation": {
+                        "type": "string",
+                        "example": "Without Onions please"
                     }
                 }
             },
@@ -1350,6 +1444,99 @@
                     }
                 }
             },
+            "ProductResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "ab69e046-fb5a-4a79-98d6-363efdf20e11"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Cheese Hamburger"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "MAIN_COURSE",
+                        "enum": [
+                            "MAIN_COURSE",
+                            "SIDE_DISH",
+                            "DRINK",
+                            "DESSERT"
+                        ]
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 25.9
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Hamburger with Cheese"
+                    }
+                }
+            },
+            "PaidRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "isPaid": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "CustomerRequestDTO": {
+                "required": [
+                    "document",
+                    "email",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Fiaperson"
+                    },
+                    "document": {
+                        "type": "string",
+                        "example": "42256425002"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "fiaperson@soat.com"
+                    }
+                }
+            },
+            "CreateOrderRequestDTO": {
+                "required": [
+                    "products"
+                ],
+                "type": "object",
+                "properties": {
+                    "customerId": {
+                        "type": "string",
+                        "example": "cd5b8e43-5d8f-4e92-9f7d-6b9d7e4f7e9c"
+                    },
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderProducts"
+                        }
+                    }
+                }
+            },
+            "ErrorsValidateData": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "string",
+                        "example": "fieldName"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "must not be blank"
+                    }
+                }
+            },
             "ProblemDto": {
                 "type": "object",
                 "properties": {
@@ -1363,6 +1550,155 @@
                         "example": "2024-07-24T22:13:58Z"
                     }
                 }
+            },
+            "CreateProductRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Pizza",
+                        "description": "The name of the product"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "MAIN_COURSE",
+                        "description": "The category of the product"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 19.99,
+                        "description": "The price of the product"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Delicious margherita pizza",
+                        "description": "Description of the product"
+                    }
+                },
+                "required": [
+                    "name",
+                    "category",
+                    "price",
+                    "description"
+                ]
+            },
+            "GetProductResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "Unique identifier of the product",
+                        "example": "ab69e046-fb5a-4a79-9d86-363e6fdf20e11"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the product",
+                        "example": "Cheese Hamburger"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category of the product",
+                        "example": "MAIN_COURSE"
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "Price of the product",
+                        "example": 25.9
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the product",
+                        "example": "Hamburger with Cheese"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "category",
+                    "price",
+                    "description"
+                ]
+            },
+            "Erros4xx5xxResponse": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "example": 400,
+                        "description": "HTTP status code of the error"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Error occurred while processing the request",
+                        "description": "Generic error message"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "example": "2025-02-01T23:28:18.000Z",
+                        "description": "Timestamp when the error occurred"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "/cook/v1/resource",
+                        "description": "Path of the API endpoint where the error occurred"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "message",
+                    "timestamp",
+                    "path"
+                ]
+            },
+            "UpdateProductRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Cheese Hamburger",
+                        "description": "Name of the product"
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "MAIN_COURSE",
+                        "description": "Category of the product"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 19.99,
+                        "description": "The price of the product"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Hamburger with Cheese",
+                        "description": "Description of the product"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "ACTIVE",
+                        "description": "The status of the product"
+                    }
+                },
+                "required": [
+                    "name",
+                    "category",
+                    "price",
+                    "description",
+                    "status"
+                ]
+            },
+            "PaymentQrResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Cheese Hamburger",
+                        "description": "Name of the product"
+                    }
+                },
+                "required": [
+                    "name"
+                ]
             }
         }
     }
