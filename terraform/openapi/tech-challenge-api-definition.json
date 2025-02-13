@@ -101,10 +101,6 @@
                     "type": "http_proxy",
                     "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/payment/v1/webhook-payment",
-                    "requestParameters": {
-                        "integration.request.querystring.data.id": "method.request.querystring.data.id",
-                        "integration.request.querystring.type": "method.request.querystring.type"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -170,9 +166,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/payment/v1/qrs/{orderId}",
-                    "requestParameters": {
-                        "integration.request.path.orderId": "method.request.path.orderId"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -249,9 +242,6 @@
                     "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -312,9 +302,6 @@
                     "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -379,7 +366,6 @@
                     "type": "http_proxy",
                     "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/order/v1/orders",
-                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -447,7 +433,6 @@
                     "type": "http_proxy",
                     "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/order/v1/customers",
-                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -537,11 +522,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/order/v1/products",
-                    "requestParameters": {
-                        "integration.request.querystring.category": "method.request.querystring.category",
-                        "integration.request.querystring.page": "method.request.querystring.page",
-                        "integration.request.querystring.size": "method.request.querystring.size"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -606,9 +586,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/order/v1/orders/{id}/paid-status",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -672,9 +649,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/order/v1/customers/{document}",
-                    "requestParameters": {
-                        "integration.request.path.document": "method.request.path.document"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -744,7 +718,6 @@
                     "type": "http_proxy",
                     "httpMethod": "POST",
                     "uri": "http://${lb_dns_name}/cook/v1/products",
-                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -785,7 +758,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/cook/v1/products",
-                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -880,7 +852,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/cook/v1/products/category",
-                    "requestParameters": {},
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -961,9 +932,6 @@
                     "type": "http_proxy",
                     "httpMethod": "GET",
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -1035,9 +1003,6 @@
                     "type": "http_proxy",
                     "httpMethod": "DELETE",
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -1119,9 +1084,6 @@
                     "type": "http_proxy",
                     "httpMethod": "PUT",
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
@@ -1208,10 +1170,6 @@
                     "type": "http_proxy",
                     "httpMethod": "PATCH",
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
-                    "requestParameters": {
-                        "integration.request.path.id": "method.request.path.id",
-                        "integration.request.path.status": "method.request.path.status"
-                    },
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "responses": {
