@@ -19,49 +19,29 @@
                 "operationId": "handleWebhook",
                 "parameters": [
                     {
-                        "name": "data.id",
+                        "name": "id",
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     {
-                        "name": "type",
+                        "name": "topic",
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/WebHookPaymentRequest"
-                            }
-                        }
-                    },
-                    "required": true
-                },
                 "responses": {
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
-                    "204": {
-                        "description": "No Content Response",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
                     "400": {
                         "description": "Bad Request Response",
                         "content": {
@@ -87,6 +67,22 @@
                     },
                     "409": {
                         "description": "Conflict Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content Response",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found Response",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -130,16 +126,6 @@
                     }
                 ],
                 "responses": {
-                    "404": {
-                        "description": "Not Found Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ProblemDto"
-                                }
-                            }
-                        }
-                    },
                     "200": {
                         "description": "Ok Response",
                         "content": {
@@ -152,6 +138,16 @@
                     },
                     "500": {
                         "description": "Internal Server Error Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDto"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found Response",
                         "content": {
                             "application/json": {
                                 "schema": {
