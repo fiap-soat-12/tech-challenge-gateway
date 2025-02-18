@@ -1189,7 +1189,7 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "PATCH",
-                    "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
+                    "uri": "http://${lb_dns_name}/cook/v1/orders/{id}/status/{status}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "requestParameters": {
