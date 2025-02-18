@@ -238,7 +238,7 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "uri": "http://${lb_dns_name}/order/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "requestParameters": {
@@ -301,7 +301,7 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "PUT",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "uri": "http://${lb_dns_name}/order/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
                     "requestParameters": {
