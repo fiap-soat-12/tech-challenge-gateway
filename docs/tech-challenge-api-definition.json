@@ -202,52 +202,6 @@
           }
         },
         "security": []
-      },
-      "put": {
-        "tags": ["Order"],
-        "summary": "Evolve Order to Paid or Not Paid",
-        "operationId": "paidOrder",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PaidRequestDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK Response"
-          },
-          "500": {
-            "description": "Internal Server Error Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "LambdaAuthorizer": []
-          }
-        ]
       }
     },
     "/order/v1/orders": {
