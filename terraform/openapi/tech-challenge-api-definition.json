@@ -164,6 +164,9 @@
                     "uri": "http://${lb_dns_name}/payment/v1/qrs/{orderId}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.orderId": "method.request.path.orderId"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -235,9 +238,12 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "GET",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "uri": "http://${lb_dns_name}/order/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -295,9 +301,12 @@
                 "x-amazon-apigateway-integration": {
                     "type": "http_proxy",
                     "httpMethod": "PUT",
-                    "uri": "http://${lb_dns_name}/api/v1/orders/{id}",
+                    "uri": "http://${lb_dns_name}/order/v1/orders/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -584,6 +593,9 @@
                     "uri": "http://${lb_dns_name}/order/v1/orders/{id}/paid-status",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -647,6 +659,9 @@
                     "uri": "http://${lb_dns_name}/order/v1/customers/{document}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.document": "method.request.path.document"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -703,7 +718,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Register a Product",
@@ -743,7 +758,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Find a Product By Category",
@@ -837,7 +852,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Find a Product By Category",
@@ -917,7 +932,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Get a Product By ID",
@@ -930,6 +945,9 @@
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -988,7 +1006,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Inactivate a Product By ID",
@@ -1001,6 +1019,9 @@
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -1069,7 +1090,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Update a Product By ID",
@@ -1082,6 +1103,9 @@
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
@@ -1155,7 +1179,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Update Order Status",
@@ -1168,6 +1192,10 @@
                     "uri": "http://${lb_dns_name}/cook/v1/products/{id}",
                     "connectionType": "VPC_LINK",
                     "connectionId": "${vpc_link_id}",
+                    "requestParameters": {
+                        "integration.request.path.id": "method.request.path.id",
+                        "integration.request.path.status": "method.request.path.status"
+                    },
                     "responses": {
                         "default": {
                             "statusCode": "200"
