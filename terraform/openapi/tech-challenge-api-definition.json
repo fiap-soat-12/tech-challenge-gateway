@@ -718,7 +718,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Register a Product",
@@ -758,7 +758,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Find a Product By Category",
@@ -852,7 +852,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Find a Product By Category",
@@ -932,7 +932,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Get a Product By ID",
@@ -1006,7 +1006,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Inactivate a Product By ID",
@@ -1090,7 +1090,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Update a Product By ID",
@@ -1179,7 +1179,7 @@
                 },
                 "security": [
                     {
-                        "Authorization": []
+                        "LambdaAuthorizer": []
                     }
                 ],
                 "summary": "Update Order Status",
